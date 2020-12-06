@@ -1,8 +1,9 @@
 from django.urls import path
 
-from art.views import home_page, gallery
+from art.views import home_page, gallery, delete_art
 
 urlpatterns = [
     path('home/', home_page, name='home page'),
     path('gallery/', gallery, name='gallery page'),
+    path('delete/<int:id>', delete_art, name='delete art'),
 ]

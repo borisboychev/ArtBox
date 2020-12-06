@@ -38,3 +38,10 @@ def gallery(request):
     }
 
     return render(request, 'gallery.html', context)
+
+
+def delete_art(request, id):
+    if request.method == "GET":
+        art = Art.objects.get(id=id)
+        art.delete()
+        return redirect('gallery page')
