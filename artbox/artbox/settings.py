@@ -40,7 +40,9 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'common',
     'art',
-    'users',
+    'artbox_auth',
+    'bootstrapform',
+    'artbox_core',
 ]
 
 MIDDLEWARE = [

@@ -51,23 +51,6 @@
                     <p>+33619530144</p>
                 </div>
             </div>
-            <div class="col">
-                <div class="contact-form">
-                    <form class="col-lg-11 offset-lg-1" method="post">
-                        {% csrf_token %}
-                        {{ form.first_name.label }}
-                        {{ form.first_name }}
-                        {{ form.last_name.label }}
-                        {{ form.last_name }}
-                        {{ form.email.label }}
-                        {{ form.email }}
-                        {{ form.message.label }}
-                        {{ form.message }}
-                        <br>
-                        <input type="submit" value="Submit" class="btn btn-primary" style="width:100%">
-                    </form>
-                </div>
-            </div>
         </div>
     </div>
 {% endblock %}

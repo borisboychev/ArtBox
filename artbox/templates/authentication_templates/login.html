@@ -1,0 +1,17 @@
+{% extends 'shared/base.html' %}
+{% load bootstrap %}
+
+{% block site_content %}
+    <h1 style="text-align:center;">Login Page</h1>
+    <form class="col-lg-6 offset-lg-3" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.username|bootstrap }}
+        {{ form.password|bootstrap }}
+        <div style="text-align:center;">
+            <input type="submit" value="Login" class="btn btn-primary mt-3">
+            <br>
+            Dont have an account? <a href="{% url 'register' %}">Register</a>
+            <br>
+        </div>
+    </form>
+{% endblock %}
