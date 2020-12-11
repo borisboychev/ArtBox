@@ -5,7 +5,7 @@ from django.shortcuts import render, redirect
 # Create your views here.
 from art.forms import ArtForm
 from art.models import Art
-from artbox_core.decorators import required_groups, denied_groups
+from artbox_core.decorators import denied_groups, required_groups
 
 
 def home_page(request):
@@ -20,7 +20,7 @@ def gallery(request):
     return render(request, 'art_templates/gallery.html', context)
 
 
-@required_groups(['artist', 'admin'])
+@required_groups(groups=['artist', 'admin'])
 def delete_art(request, id):
     if request.method == "GET":
         art = Art.objects.get(id=id)
@@ -28,9 +28,7 @@ def delete_art(request, id):
         return redirect('gallery page')
 
 
-# @required_groups(['artist' 'admin'])
 @denied_groups(groups=['visitor'])
-@login_required
 def create_art(request):
     if request.method == "GET":
         context = {

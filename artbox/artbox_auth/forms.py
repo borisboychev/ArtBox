@@ -4,7 +4,6 @@ from django.contrib.auth.models import User
 import re
 
 
-
 class LoginForm(forms.Form):
     username = forms.CharField()
     password = forms.CharField(
@@ -32,8 +31,3 @@ class RegisterForm(UserCreationForm):
         else:
             raise forms.ValidationError("Email field required")
 
-
-# class UserProfileForm(forms.ModelForm):
-#     class Meta:
-#         model = UserProfile
-#         fields = '__all__'
