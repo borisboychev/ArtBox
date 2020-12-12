@@ -4,8 +4,7 @@ from django.shortcuts import render, redirect
 
 # Create your views here.
 from artbox_auth.forms import RegisterForm, LoginForm
-
-
+from users.models import UserProfile
 
 
 def register_user(request):
@@ -23,7 +22,9 @@ def register_user(request):
         # Every user gets visitor group by default
         starter_group = Group.objects.get(name='visitor')
         user.groups.add(starter_group)
-        user.save()
+
+        profile = UserProfile(user=user)
+        profile.save()
 
         login(request, user)
         return redirect('gallery page')

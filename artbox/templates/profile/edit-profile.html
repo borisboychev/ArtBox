@@ -1,0 +1,17 @@
+{% extends 'shared/base.html' %}
+{% load bootstrap %}
+
+{% block site_header %}
+    <title>ArtBox | Edit Profile</title>
+{% endblock %}
+
+{% block site_content %}
+    <h1 style="text-align:center;">Edit Profile Page</h1>
+    <form class="col-lg-6 offset-lg-3" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form|bootstrap_horizontal:'col-sm-0' }}
+        <div style="text-align:center;">
+            <input type="submit" value="Edit" class="btn btn-primary mt-3">
+        </div>
+    </form>
+{% endblock %}

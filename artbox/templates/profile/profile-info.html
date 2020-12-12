@@ -1,8 +1,29 @@
-{% extends 'shared/base.html'%}
+{% extends 'shared/base.html' %}
 
+{% block site_header %}
+    <title>ArtBox | Profile</title>
+{% endblock %}
 
 
 {% block site_content %}
-<h1 class="text-center">Your Profile</h1>
+    <div class="text-center">
+        <h1>Your profile</h1>
+        {% if userprofile.profile_picture %}
+            <img class="rounded-circle mb-3" src="{{ userprofile.profile_picture.url }}" alt="Generic placeholder image"
+                 width="140"
+                 height="140">
+        {% else %}
+            <img class="rounded-circle mb-3" src="https://afribary.com/authors/anonymous-user/photo"
+                 alt="Generic placeholder image" width="140"
+                 height="140">
+        {% endif %}
+        <div class="w-50 m-auto">
+            <h5>Username: {{ user.username }}</h5>
+            <h5>Username: {{ user.email }}</h5>
+            <h5>Password: <a href="{% url 'change password' %}">Change Password</a></h5>
+            <a class="btn btn-primary" href="{% url 'edit profile' user.id %}">Edit Profile</a>
+        </div>
+    </div>
+    <hr>
 
 {% endblock %}

@@ -10,7 +10,7 @@ def required_groups(groups=[]):
             if user_groups.intersection(groups_set):
                 return view_func(request, *args, **kwargs)
             else:
-                return HttpResponse("You are not authorized")
+                return HttpResponse(f"Your group ({' '.join(groups)}) is not authorized")
 
         return wrapper
 
@@ -23,7 +23,7 @@ def denied_groups(groups=[]):
         def wrapper(request, *args, **kwargs):
             user_groups = set([group.name for group in request.user.groups.all()])
             if user_groups.intersection(groups_set):
-                return HttpResponse("You are not authorized")
+                return HttpResponse(f"Your group ({' '.join(groups)}) is not authorized")
             else:
                 return view_func(request, *args, **kwargs)
 

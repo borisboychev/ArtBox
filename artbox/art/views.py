@@ -1,11 +1,15 @@
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
 from django.core.mail import send_mail
+from django.http import HttpResponse
 from django.shortcuts import render, redirect
 
 # Create your views here.
-from art.forms import ArtForm
+from art.forms import ArtForm, EditArtForm
 from art.models import Art
+from artbox_core.clean_up import clean_up
 from artbox_core.decorators import denied_groups, required_groups
+from users.models import UserProfile
 
 
 def home_page(request):
@@ -14,7 +18,8 @@ def home_page(request):
 
 def gallery(request):
     context = {
-        'artwork': Art.objects.all()
+        'artwork': Art.objects.all(),
+        'user': request.user,
     }
 
     return render(request, 'art_templates/gallery.html', context)
@@ -24,8 +29,12 @@ def gallery(request):
 def delete_art(request, id):
     if request.method == "GET":
         art = Art.objects.get(id=id)
-        art.delete()
-        return redirect('gallery page')
+        if art.user.user == request.user:
+            image = art.image
+            clean_up(image.path)
+            art.delete()
+            return redirect('gallery page')
+        return HttpResponse(f"Only user {art.user.user.username} is authorized to delete.")
 
 
 @denied_groups(groups=['visitor'])
@@ -37,9 +46,16 @@ def create_art(request):
         return render(request, 'art_templates/create.html', context)
 
     art_form = ArtForm(request.POST, request.FILES)
-    print(art_form.is_valid())
     if art_form.is_valid():
-        art_form.save()
+
+        user = UserProfile.objects.get(user=request.user)
+        name = art_form.cleaned_data['name']
+        artist = art_form.cleaned_data['artist']
+        type = art_form.cleaned_data['type']
+        image = art_form.cleaned_data['image']
+
+        art = Art(name=name, artist=artist, type=type, image=image, user=user)
+        art.save()
 
         return redirect('gallery page')
     else:
@@ -47,3 +63,36 @@ def create_art(request):
             'form': ArtForm(),
         }
         return render(request, 'art_templates/create.html', context)
+
+
+def edit_art(request, id):
+    art = Art.objects.get(id=id)
+    if request.method == 'GET':
+        context = {
+            'form': EditArtForm(),
+        }
+
+        return render(request, 'art_templates/edit.html', context)
+
+    form = EditArtForm(request.POST)
+
+    if form.is_valid():
+        art_name = form.cleaned_data['name']
+        artist = form.cleaned_data['artist']
+        art_type = form.cleaned_data['type']
+
+        # in case a field is empty it doesnt leave the field in the db empty
+        if art_name:
+            art.name = art_name
+
+        if artist:
+            art.artist = artist
+
+        if art_type:
+            art.type = art_type
+
+        art.save()
+
+        return redirect('gallery page')
+
+    return render(request, 'art_templates/edit.html', {'form': EditArtForm()})
