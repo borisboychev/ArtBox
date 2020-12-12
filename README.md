@@ -12,7 +12,7 @@
 
 ---
 
-#Gallery Page  -Users who created a photo in gallery have edit and delete functionality and only certain user groups have upload functionality
+#Gallery Page  <br>-Users who created a photo in gallery have edit and delete functionality and only certain user groups have upload functionality
 ![](images-github/gallery1.png)  ![](images-github/gallery2.png)  ![](images-github/upload.png)
 
 ---
@@ -23,7 +23,7 @@
 
 ---
 
-#Profile  -When edition your profile not all fields are required and they wont be saved as blank
+#Profile  <br>-When editing your profile not all fields are required and they wont be saved as blank
 ![](images-github/profile.png)
 ![](images-github/edit.png)
 ![](images-github/changepassword.png)
