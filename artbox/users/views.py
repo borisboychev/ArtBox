@@ -18,6 +18,8 @@ class MyPasswordChangeView(PasswordChangeView):
 
 @login_required(login_url='login')
 def edit_profile(request, id):
+    # Checks if the current logged in user id doesn't match the requested id
+    # If the current user id and the request id dont match the current user gets logged out and redirected to log in again
     if request.user.id != id:
         logout(request)
         return redirect('login')
@@ -28,9 +30,6 @@ def edit_profile(request, id):
             'user': user,
             'form': EditProfileForm()
         }
-
-        if request.user.id != user.id:
-            return redirect('login')
 
         return render(request, 'profile/edit-profile.html', context)
     form = EditProfileForm(request.POST, request.FILES)
@@ -61,6 +60,8 @@ def edit_profile(request, id):
 
 @login_required(login_url='login')
 def profile_page(request, id):
+    # Checks if the current logged in user id doesn't match the requested id
+    # If the current user id and the request id dont match the current user gets logged out and redirected to log in again
     if request.user.id != id:
         logout(request)
         return redirect('login')

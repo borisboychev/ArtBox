@@ -19,6 +19,7 @@ def required_groups(groups=[]):
 
 def denied_groups(groups=[]):
     groups_set = set(groups)
+
     def decorator(view_func):
         def wrapper(request, *args, **kwargs):
             user_groups = set([group.name for group in request.user.groups.all()])
