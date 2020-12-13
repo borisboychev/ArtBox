@@ -24,7 +24,7 @@ class RegisterForm(UserCreationForm):
         email = self.cleaned_data.get('email', False)  # If no email default value will be False
         print(email)
         if email:
-            if re.match(r'[^@ \t\r\n]+@[^@ \t\r\n]+\.[^@ \t\r\n]+', email):
+            if re.match(r'[^@ \t\r\n]+@[^@ \t\r\n]+\.[^@ \t\r\n]+', self.cleaned_data['email']):
                 return email
             else:
                 raise forms.ValidationError("Email not valid")
