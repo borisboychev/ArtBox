@@ -14,12 +14,15 @@
                     <h4 class="text-center">Art name: <a style="color: royalblue;">{{ art.name }}</a></h4>
                     <h4 class="text-center">Artist: <a style="color: royalblue;">{{ art.artist }}</a></h4>
                     <h4 class="text-center">Category: <a style="color: royalblue;">{{ art.type }}</a></h4>
-                    {% if user.userprofile.id == art.user.id %}
                     <div class="text-center">
+                        {% if user.userprofile.id == art.user.id or is_admin %}
                         <a class="btn btn-danger" href="{% url 'delete art' art.id %}">Delete</a>
+                        {% endif %}
+                        {% if user.userprofile.id == art.user.id %}
                         <a class="btn btn-success" href="{% url 'edit art' art.id %}">Edit</a>
+                        {% endif %}
+
                     </div>
-                    {% endif %}
                 </div>
             </div>
         {% endfor %}

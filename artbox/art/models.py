@@ -11,12 +11,14 @@ class Art(models.Model):
     ABSTRACT = 'abstract'
     CARTOON = 'cartoon'
     GRAFFITI = 'graffiti'
+    NATURE = 'nature'
     OTHER = 'other'
 
     ART_TYPES = (
         (ABSTRACT, 'Abstract'),
         (CARTOON, 'Cartoon'),
         (GRAFFITI, 'Graffiti'),
+        (NATURE, 'Nature'),
         (OTHER, 'Other'),
     )
 

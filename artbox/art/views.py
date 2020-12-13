@@ -24,6 +24,7 @@ class GalleryView(View):
         context = {
             'artwork': Art.objects.all(),
             'user': request.user,
+            'is_admin': {'admin'}.intersection(set([group.name for group in request.user.groups.all()])),
         }
 
         return render(request, 'art_templates/gallery.html', context)
@@ -33,7 +34,8 @@ class GalleryView(View):
 def delete_art(request, id):
     if request.method == "GET":
         art = Art.objects.get(id=id)
-        if art.user.user == request.user:
+        is_admin = {'admin'}.intersection(set([group.name for group in request.user.groups.all()]))
+        if art.user.user == request.user or is_admin:
             image = art.image
             clean_up(image.path)
             art.delete()
@@ -42,7 +44,7 @@ def delete_art(request, id):
 
 
 @login_required(login_url='login')
-@denied_groups(groups=['visitor'])
+@required_groups(['artist'])
 def create_art(request):
     if request.method == "GET":
         context = {
@@ -70,7 +72,8 @@ def create_art(request):
         return render(request, 'art_templates/create.html', context)
 
 
-@required_groups(['artist', 'admin'])
+@login_required(login_url='login')
+@required_groups(['artist'])
 def edit_art(request, id):
     art = Art.objects.get(id=id)
     if request.method == 'GET':
