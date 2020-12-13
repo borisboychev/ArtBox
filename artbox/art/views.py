@@ -5,6 +5,8 @@ from django.http import HttpResponse
 from django.shortcuts import render, redirect
 
 # Create your views here.
+from django.views import View
+
 from art.forms import ArtForm, EditArtForm
 from art.models import Art
 from artbox_core.clean_up import clean_up
@@ -12,17 +14,19 @@ from artbox_core.decorators import denied_groups, required_groups
 from users.models import UserProfile
 
 
-def home_page(request):
-    return render(request, 'art_templates/home.html')
+class HomePageView(View):
+    def get(self, request):
+        return render(request, 'art_templates/home.html')
 
 
-def gallery(request):
-    context = {
-        'artwork': Art.objects.all(),
-        'user': request.user,
-    }
+class GalleryView(View):
+    def get(self, request):
+        context = {
+            'artwork': Art.objects.all(),
+            'user': request.user,
+        }
 
-    return render(request, 'art_templates/gallery.html', context)
+        return render(request, 'art_templates/gallery.html', context)
 
 
 @required_groups(groups=['artist', 'admin'])
@@ -37,6 +41,7 @@ def delete_art(request, id):
         return HttpResponse(f"Only user {art.user.user.username} is authorized to delete.")
 
 
+@login_required(login_url='login')
 @denied_groups(groups=['visitor'])
 def create_art(request):
     if request.method == "GET":
@@ -65,12 +70,16 @@ def create_art(request):
         return render(request, 'art_templates/create.html', context)
 
 
+@required_groups(['artist', 'admin'])
 def edit_art(request, id):
     art = Art.objects.get(id=id)
     if request.method == 'GET':
         context = {
             'form': EditArtForm(),
         }
+
+        if art.user.user != request.user:
+            return HttpResponse(f"Only user {art.user.user.username} is authorized to delete.")
 
         return render(request, 'art_templates/edit.html', context)
 

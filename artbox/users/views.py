@@ -1,3 +1,4 @@
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib.auth.views import PasswordChangeView, PasswordChangeDoneView
 from django.urls import reverse_lazy
@@ -13,6 +14,7 @@ class MyPasswordChangeView(PasswordChangeView):
     success_url = reverse_lazy('gallery page')
 
 
+@login_required(login_url='login')
 def edit_profile(request, id):
     user = User.objects.get(id=id)
     if request.method == "GET":
@@ -47,6 +49,7 @@ def edit_profile(request, id):
         return redirect('profile page', id)
 
 
+@login_required(login_url='login')
 def profile_page(request, id):
     user = User.objects.get(id=id)
     if request.method == "GET":
