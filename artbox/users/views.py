@@ -1,6 +1,8 @@
+from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib.auth.views import PasswordChangeView, PasswordChangeDoneView
+from django.http import HttpResponse
 from django.urls import reverse_lazy
 from django.shortcuts import render, redirect
 
@@ -16,12 +18,20 @@ class MyPasswordChangeView(PasswordChangeView):
 
 @login_required(login_url='login')
 def edit_profile(request, id):
+    if request.user.id != id:
+        logout(request)
+        return redirect('login')
+
     user = User.objects.get(id=id)
     if request.method == "GET":
         context = {
             'user': user,
             'form': EditProfileForm()
         }
+
+        if request.user.id != user.id:
+            return redirect('login')
+
         return render(request, 'profile/edit-profile.html', context)
     form = EditProfileForm(request.POST, request.FILES)
     if form.is_valid():
@@ -51,6 +61,10 @@ def edit_profile(request, id):
 
 @login_required(login_url='login')
 def profile_page(request, id):
+    if request.user.id != id:
+        logout(request)
+        return redirect('login')
+
     user = User.objects.get(id=id)
     if request.method == "GET":
         context = {
@@ -59,4 +73,5 @@ def profile_page(request, id):
             'artwork': user.userprofile.art_set.all(),
             'form': UserProfileForm()
         }
+
         return render(request, 'profile/profile-info.html', context)
