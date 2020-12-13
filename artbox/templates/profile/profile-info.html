@@ -19,7 +19,7 @@
         {% endif %}
         <div class="w-50 m-auto">
             <h5>Username: {{ user.username }}</h5>
-            <h5>Username: {{ user.email }}</h5>
+            <h5>Email: {{ user.email }}</h5>
             <h5>Password: <a href="{% url 'change password' %}">Change Password</a></h5>
             <a class="btn btn-primary" href="{% url 'edit profile' user.id %}">Edit Profile</a>
         </div>
