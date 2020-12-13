@@ -16,7 +16,7 @@ def register_user(request):
 
     register_form = RegisterForm(request.POST)
 
-    if register_form.is_valid() and register_form.clean_email():
+    if register_form.is_valid():
         user = register_form.save()
 
         # Every user gets visitor group by default
